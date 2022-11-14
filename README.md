@@ -1,9 +1,10 @@
 # Grafana
+# Connect ELK-PRD1
+- VPN
+ssh jturyna@192.168.24.204
 
-Nastavení DEV - import na STG - import na PRD
-# ELK PRD 1
-192.168.24.204
-
+# Grafana config
+/data/infra/grafana/develop/grafana.db
 # Návrh řešení
 - General složka - default složka může edutovat a zakládat každý a každý bude moc upravovat -> Snaha o vyčištění, zůstanou tu dashboardy, ke kterým se nikdo nepřihlásí
 - Konkrétní složka služby - edit pouze konkrétní týmy, které o to budou mít zájem. Vždy musí být alespoň jeden 
@@ -48,6 +49,9 @@ z docker-compose.staging.yml
 # docker desktop
 docker run -d -v C:\Docker\grafana:/var/lib/grafana --name=grafana-latest -p 3000:3000 grafana/grafana:9.2.4
 
+# API
+https://grafana.com/docs/grafana/latest/developers/http_api/
+
 # Get users
 curl http://admin:admin@localhost:3000/api/users
 
@@ -66,27 +70,14 @@ POST /api/admin/users -d @file.json
 
 curl -d '{"userId":11}' -X POST http://admin:admin@localhost:3000/api/teams/2/members
 
-# Get team id by name
-curl http://admin:admin@localhost:3000/api/teams/search?query=Putty
+# Get Team by name - Not found = "totalCount": 0
+curl http://admin:admin@localhost:3000/api/teams/search?query=Putty | jq .
 
 # Get user id by email
 curl http://admin:admin@localhost:3000/api/users?query=jiri.turyna@jablotron.cz
 
 # list all running services
 systemctl --state=active
-
-## Connect ELK-PRD1
-- VPN
-ssh jturyna@192.168.24.204
-
-## Grafana config
-/data/infra/grafana/develop/grafana.db
-## API
-https://grafana.com/docs/grafana/latest/developers/http_api/
-## GET Users
-curl http://admin:admin@localhost:3000/api/users | jq .
-## Get Team by name - Not found = "totalCount": 0
-curl http://admin:admin@localhost:3000/api/teams/search?query=Putty | jq .
 
 ## Get all folders
 curl http://admin:admin@localhost:3000/api/folders | jq .
@@ -119,12 +110,3 @@ curl http://admin:admin@localhost:3000/api/folders/JR11MPDVz/permissions | jq .
 - - check if passed team exists
 - - check if dashboards exist
 - - Dashboardy pro edit = podle týmu + jakýkoliv v "dashboards"
-
-
-
-## Dotazy
-- Kam cpát python scripty a dokumentaci
-- Jak se pozná, který environment provolávám -> swarm-endpoints.json 3000 je Grafana, ale nevím jaké 
-    docker ps -> permission denied
-- Grafana z Gitlabu
-- auto_assign_org_role??
