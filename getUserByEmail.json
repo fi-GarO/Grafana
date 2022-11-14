@@ -1,0 +1,14 @@
+[
+    {
+      "id": 11,
+      "name": "Jiří Turyna",
+      "login": "jiri.turyna@jablotron.cz",
+      "email": "jiri.turyna@jablotron.cz",
+      "avatarUrl": "/avatar/9149eaaf7f3081df64f3440e3668f558",
+      "isAdmin": false,
+      "isDisabled": false,
+      "lastSeenAt": "2022-11-14T12:23:23+01:00",
+      "lastSeenAtAge": "8 minutes",
+      "authLabels": []
+    }
+  ]
