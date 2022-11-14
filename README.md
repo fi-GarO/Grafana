@@ -22,15 +22,15 @@ Nastavení DEV - import na STG - import na PRD
         - git = ops.tools repozitář vlastní branch - https://gitlab.jablotron.cloud/jablotron_ops/ops.tools
 
 - Grafana logy -> bad request, kde k tomu něco dohledám?
-- seznam všech running services -> service  --status-all vrací nejspíš containery
-- docker ps -> můžu sudo?
+    - - v container logs
+- docker ps -> můžu sudo
 
 - jak poznám na který env se změny promítnou - pošlu localhost, jakto, že to jede do grafana-dev
+    - - docker service ls -> develop = 3000, staging = 3100, production = 3200
 
 - kde je /usr/local/etc/grafana/grafana.ini - potřebuju se dopátrat k auto_assign_org_role, auto_assign_org, mělo by být v .ini souboru, který nemůžu najít 
-    - uvnitř dockeru
-    https://grafana.com/docs/grafana/v9.0/setup-grafana/configure-grafana/#auto-assign-org
-    - v Grafaně je org data - http://grafana-dev.monitoring.local.jablotron.cloud/admin/settings, ale je potřeba měnit v grafana.ini a provést restart
+    - - uvnitř dockeru https://grafana.com/docs/grafana/v9.0/setup-grafana/configure-grafana/#auto-assign-org
+    - - v Grafaně je org data - http://grafana-dev.monitoring.local.jablotron.cloud/admin/settings, ale je potřeba měnit v grafana.ini a provést restart
 
 - proč mi neprochází curl -d '{"userId":11}' -X POST http://admin:admin@localhost:3000/api/teams/2/members
     - řešit až na locale
