@@ -46,53 +46,6 @@ z docker-compose.staging.yml
         -  environment:
       - GF_AUTH_ANONYMOUS_ENABLED=true
 
-# docker desktop
-docker run -d -v C:\Docker\grafana:/var/lib/grafana --name=grafana-latest -p 3000:3000 grafana/grafana:9.2.4
-
-# API
-https://grafana.com/docs/grafana/latest/developers/http_api/
-
-# Get users
-curl http://admin:admin@localhost:3000/api/users
-
-# Create new user
-POST /api/admin/users -d @file.json
-
-# Default config
-- auto_assign_org_role: viewer
-- auto_assign_org: 1
-
-# Add user to team
-- potřeba userId a teamId
-- teamId: 2 (Putty)
-- userId: 11 (jiri.turyna@jablotron.cz)
-
-
-curl -d '{"userId":11}' -X POST http://admin:admin@localhost:3000/api/teams/2/members
-
-# Get Team by name - Not found = "totalCount": 0
-curl http://admin:admin@localhost:3000/api/teams/search?query=Putty | jq .
-
-# Get user id by email
-curl http://admin:admin@localhost:3000/api/users?query=jiri.turyna@jablotron.cz
-
-# list all running services
-systemctl --state=active
-
-## Get all folders
-curl http://admin:admin@localhost:3000/api/folders | jq .
-## Get folder by uid 
-- test dashboard: http://grafana-dev.monitoring.local.jablotron.cloud/d/3KtLGPv4k/test-dashboard?orgId=1
-- test dashboard uid: JR11MPDVz
-
-curl http://admin:admin@localhost:3000/api/folders/JR11MPDVz | jq .
-
-## Get folder permissions
-- test dashboard uid: JR11MPDVz
-
-curl http://admin:admin@localhost:3000/api/folders/JR11MPDVz/permissions | jq .
-
-- Je vidět ID týmu a jaký má permission pro dannou složku 
 ## Organization /org/users
 - Admin user který má View permission na dashboard může upravovat dashboard všude
 - Viewer user nemůže upravovat dashboard nikde, kromě definovaný permission u konkrétního dashboardu
@@ -110,3 +63,56 @@ curl http://admin:admin@localhost:3000/api/folders/JR11MPDVz/permissions | jq .
 - - check if passed team exists
 - - check if dashboards exist
 - - Dashboardy pro edit = podle týmu + jakýkoliv v "dashboards"
+
+# docker desktop
+docker run -d --name=grafana-latest -p 3000:3000 grafana/grafana:9.2.4
+
+# API
+https://grafana.com/docs/grafana/latest/developers/http_api/
+
+# Get users
+curl http://admin:admin@localhost:3000/api/users
+
+# Create new user
+POST /api/admin/users -d @file.json
+
+# Default config
+- auto_assign_org_role: viewer
+- auto_assign_org: 1
+
+# list all running services
+systemctl --state=active
+
+# Get Team by name - Not found = "totalCount": 0
+curl http://admin:admin@localhost:3000/api/teams/search?query=MyTestTeam | jq .
+
+
+# Get user id by email
+curl http://admin:admin@localhost:3000/api/users?query=jiri.turyna@jablotron.cz
+
+# Get all folders
+curl http://admin:admin@localhost:3000/api/folders | jq .
+# Get folder by uid 
+- test dashboard: http://grafana-dev.monitoring.local.jablotron.cloud/d/3KtLGPv4k/test-dashboard?orgId=1
+- test dashboard uid: JR11MPDVz
+
+curl http://admin:admin@localhost:3000/api/folders/JR11MPDVz | jq .
+
+# Get folder permissions
+- test dashboard uid: JR11MPDVz
+
+curl http://admin:admin@localhost:3000/api/folders/JR11MPDVz/permissions | jq .
+
+- Je vidět ID týmu a jaký má permission pro dannou složku 
+
+# Add team
+- nefunguje, rozchodil jsem v pythonu
+curl -X POST -d @newTeam.json http://admin:admin@localhost:3000/api/teams -H "Accept: application/json" 
+
+# Add user to team
+- potřeba userId a teamId
+- teamId: 3 (MyTestTeam)
+- userId: 2 (jiri.turyna@jablotron.cz)
+
+
+curl -d '{"userId":2}' -X POST http://admin:admin@localhost:3000/api/teams/3/members
