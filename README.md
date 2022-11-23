@@ -116,3 +116,47 @@ curl -X POST -d @newTeam.json http://admin:admin@localhost:3000/api/teams -H "Ac
 
 
 curl -d '{"userId":2}' -X POST http://admin:admin@localhost:3000/api/teams/3/members
+
+# Probírat task i s ostatními členy týmu
+# Pomodoro technika
+- 20 min progress -> pokud jsem zaseklý i přes google -> pauza -> try 2 -> ping někoho
+
+# Vytvořit subtasky na jednotlivé kroky
+# Vytvořit git projekt v ops.tools
+- jednotlivé subtasky v branchích   
+
+# Step by Step
+- 1) Spojit se s týmem
+- 2) Oflagovat existující dashboardy (i v General složce), které tým vnímá, že patří jim
+- 3) Vytvořit složku týmu
+- 4) Přesunout dashboardy z bodu 2) do složky týmu
+- 5) Přidat nový tým / check existence
+- 6) Přidat týmu edit na jejich složku
+- 7) Doplnit uživatele do týmu
+- 8) Zrevidovat, že každý uživatel kromě Admina má "jen" viewera
+- 9) Nastavit všechny foldery na role Editor = View
+- 10) Check, že každý dashboard je ve složce
+- 11) Check, že neexistuje složka, kterou nemůže nikdo editovat
+
+# Parametry
+- 1) nothing
+- 2) Generates: Názvy dashboardů, název týmů, seznam uživatelů
+- 3) Needs: Název týmu (2)
+- 4) Needs: Názvy dashboardů (2)
+- 5) Needs: Název týmu (3)
+- 6) Needs: Název týmu (2 - dashboardy už jsou ve složce, složka je podle názvu týmu)
+- 7) Seznam uživatelů + název týmu
+- 8) Seznam všech uživatelů (vytáhni si seznam z API)
+- 9) Seznam všech složek (vytáhni si seznam z API)
+- 10) Seznam všech dashboardů (vytáhni si seznam z API)
+- 11) Seznam všech složek (vytáhni si seznam z API)
+
+# Funkce 
+- 3) Check existence, Založ složku -> Vrací True = povedlo se, False = tým už existuje
+- 4) Přesuň dashboardy do složky
+- 5) Check existence, vytvoř tým
+- 6) Přidání permissions týmu pro edit složky
+- 7) Check existence, Vytvoř usera, přidej uživatele do týmu
+- 8) Check permissions pro každého existujícího uživatele
+- 9) Set všech existujících folder permissions pro  roli Editor = View
+- 10) Check všech existujících dashboardů, že je může editovat i někdo jiný než admin
