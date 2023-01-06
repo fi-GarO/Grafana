@@ -1,0 +1,16 @@
+{
+    "id": 166,
+    "uid": "JR11MPDVz",
+    "title": "Test",
+    "url": "/dashboards/f/JR11MPDVz/test",
+    "hasAcl": false,
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": true,
+    "canDelete": true,
+    "createdBy": "jiri.turyna@jablotron.cz",
+    "created": "2022-11-11T13:57:52+01:00",
+    "updatedBy": "jiri.turyna@jablotron.cz",
+    "updated": "2022-11-11T13:57:52+01:00",
+    "version": 1
+  }

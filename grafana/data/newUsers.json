@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Turyna",
+        "email": "turyna@jablotron.cz",
+        "login": "turyna",
+        "password": "admin"
+    },
+    {
+        "name": "Test",
+        "email": "test@something.com",
+        "login": "test",
+        "password": "admin"
+    }
+]

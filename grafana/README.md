@@ -1,7 +1,39 @@
 # Grafana
 # Connect ELK-PRD1
 - VPN
-ssh jturyna@192.168.24.204
+@192.168.24.204
+
+# Todo
+
+- getDashboardUid -> předělat -> aktuálně nefunguje na duplikáty (může být víc dashboardů se stejným jménem napříč složkami, ale né v jedné složce)
+    - Přidat kontext folderId, aby bylo jasné který board je na mysli. 
+    - moveDashboard to Folder + otestovat jak se bude chovat, když přesuneš board se stejným jménem -> odchytit
+    - dashboardExistence
+    - getDashboardUid 
+
+- Rozšířit vstupní JSON o možnost role -> není funkční pro Grafana API a je potřeba napsat změnu pro PATCH
+        - Chceme umět, aby sice byl každý Editor, ale pokud je definováno v Jsonu -> bude mu ponechán Viewer 
+            - Potřeba přidat parametr "role" do JSON validace
+
+- getUserEmailById - check for fail response
+
+- getData one time na vstupu a passovat jako argument místo volat getAll...() při každém callu funkce
+
+
+
+- Otestovat co budou dashboardy dělat, když budou v General složce - minimálně checkAllDashboardAbilityToEdit -> tahá si z jsonu folderId a nevim co to udělá pro General 
+    - nedává folderId
+    - dodělat, když nemá folderId -> getDashboardPermission -> a viewer nemá edit -> nejde editovat (všichni jsou viewer) 
+        - Všichni jsou už EDITOR (setDefaultUserPermissions) - DONE
+- zapřemýšlet jestli by nedávalo smysl mít všechny jako Editor -> když vytvořím dashboard v General, můžu ho hned editovat a zároveň všude jinde mám furt jen view
+    - DONE
+- create user permissions = Viewer - DONE
+- bere Json:
+    - addUserToTeam -> vezmu json, projdu všechny emaily a team parametry a přidám uživatele do týmu - DONE
+        - Podle mě nedává smysl, aby bral JSON. Něco jinýho bude rozebírat script a pošle vstupní parametry této funkci.
+    - createNewTeam -> vezmu json, projdu všechny názvy týmů a vytvořím je - DONE
+    - createNewUser -> vezmu json, projdu všechny emaily uživatelů a vytvořím je - DONE
+
 
 # Grafana config
 /data/infra/grafana/develop/grafana.db
@@ -12,10 +44,6 @@ ssh jturyna@192.168.24.204
 - tvoření týmů a přidělování dashboardů manuálně přes GUI - rychlejší než tvoření scriptů -> můžeme se pobavit do budoucna
 - zascriptovat vytvoření novýho uživatele -> seznam v jsonu -> test existence uživatele, test existence daného týmu, test existence emailu
 - Zachování admin účtu s heslem ve 1pass nad každým prostředím -> putty
-
-# Todo
-- hidnout foldery/Dashboardy na úrovni organizace - např. externí firmě
-    - například remove viewer pro folder
 
 # Dotazy:
 - jak pracovat se servery - gitlab repo na elk prd, kam můžu ukládat scripty, kam psát readme, kam uložit json, který potřebuju přes curl zavolat 
@@ -73,8 +101,14 @@ https://grafana.com/docs/grafana/latest/developers/http_api/
 # Get users
 curl http://admin:admin@localhost:3000/api/users
 
+# getDashborad by UID
+curl http://admin:admin@localhost:3000/api/dashboards/uid/fv0Zap54k
+
 # Create new user
 POST /api/admin/users -d @file.json
+
+# get folder permissions
+curl http://admin:admin@localhost:3000/api/folders/poz2Jt54z/permissions
 
 # Default config
 - auto_assign_org_role: viewer
@@ -117,7 +151,56 @@ curl -X POST -d @newTeam.json http://admin:admin@localhost:3000/api/teams -H "Ac
 
 curl -d '{"userId":2}' -X POST http://admin:admin@localhost:3000/api/teams/3/members
 
+# get Dashboards 
+curl http://admin:admin@localhost:3000/api/search -H "Accept: application/json" | jq .
 
-curl -s -u wilson@jablotron.cz:AiO7BS79RLDxgORA8ku5ECDB -X GET --get -H "Content-type: application/json" -d 'jql=project="Change/Maintenance+"+AND+"Start+date+and+time[Time+stamp]">=now()+AND+"Start+date+and+time[Time+stamp]"<8h' 'https://jablotroncloudservices.atlassian.net/rest/api/2/search'
+# Step by Step
+- 1) Spojit se s týmem
+- 2) Oflagovat existující dashboardy (i v General složce), které tým vnímá, že patří jim
+- 3) Vytvořit složku týmu
+- 4) Přesunout dashboardy z bodu 2) do složky týmu
+- 5) Přidat nový tým / check existence
+- 6) Přidat týmu edit na jejich složku
+- 7) Doplnit uživatele do týmu
+- 8) Zrevidovat, že každý uživatel kromě Admina má "jen" viewera
+- 9) Nastavit všechny foldery na role Editor = View
+- 10) Check, že každý dashboard je ve složce
+- 11) Check, že neexistuje složka, kterou nemůže nikdo editovat
 
+# Parametry
+- 1) nothing
+- 2) Generates: Názvy dashboardů, název týmů, seznam uživatelů
+- 3) Needs: Název týmu (2)
+- 4) Needs: Názvy dashboardů (2)
+- 5) Needs: Název týmu (3)
+- 6) Needs: Název týmu (2 - dashboardy už jsou ve složce, složka je podle názvu týmu)
+- 7) Seznam uživatelů + název týmu
+- 8) Seznam všech uživatelů (vytáhni si seznam z API)
+- 9) Seznam všech složek (vytáhni si seznam z API)
+- 10) Seznam všech dashboardů (vytáhni si seznam z API)
+- 11) Seznam všech složek (vytáhni si seznam z API)
 
+# Funkce 
+- 3) Check existence, Založ složku -> Vrací True = povedlo se, False = tým už existuje
+- 4) Přesuň dashboardy do složky
+- 5) Check existence, vytvoř tým
+- 6) Přidání permissions týmu pro edit složky
+- 7) Check existence, Vytvoř usera, přidej uživatele do týmu
+- 8) Check permissions pro každého existujícího uživatele
+- 9) Set všech existujících folder permissions pro  roli Editor = View
+- 10) Check všech existujících dashboardů, že je může editovat i někdo jiný než admin
+
+# Test all scripts
+- ls */*.py|xargs -n 1 -P 3 python3
+
+# Get all users within the current organization
+- only works with Basic Authentication
+curl http://admin:admin@localhost:3000/api/orgs/1/users | jq .
+
+# Check všech existujících dashboardů, že je může editovat i někdo jiný než admin
+- Seznam všech dashboardů -> podle existence -> nemá FolderTitle
+- permissions pro každý takový dashboard
+- check, že má někde permission: "2"
+
+# Dashboard Inherited Permissions from Folder
+- vrací list permissions pro Folder

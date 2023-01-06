@@ -1,0 +1,38 @@
+[
+  {
+    "orgId": 1,
+    "userId": 1,
+    "email": "admin@localhost",
+    "name": "",
+    "avatarUrl": "/avatar/46d229b033af06a191ff2267bca9ae56",
+    "login": "admin",
+    "role": "Admin",
+    "lastSeenAt": "2022-12-28T09:27:22Z",
+    "lastSeenAtAge": "< 1 minute",
+    "isDisabled": false
+  },
+  {
+    "orgId": 1,
+    "userId": 3,
+    "email": "test@something.com",
+    "name": "Test",
+    "avatarUrl": "/avatar/903f6667225547474d6cd7e70de1454f",
+    "login": "test",
+    "role": "Viewer",
+    "lastSeenAt": "2012-12-09T10:31:21Z",
+    "lastSeenAtAge": "10 years",
+    "isDisabled": false
+  },
+  {
+    "orgId": 1,
+    "userId": 2,
+    "email": "turyna@jablotron.cz",
+    "name": "Turyna",
+    "avatarUrl": "/avatar/8718b0d937bff32763406b143992ae92",
+    "login": "turyna",
+    "role": "Viewer",
+    "lastSeenAt": "2012-12-09T10:31:21Z",
+    "lastSeenAtAge": "10 years",
+    "isDisabled": false
+  }
+]
