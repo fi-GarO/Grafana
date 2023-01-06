@@ -1,8 +1,4 @@
 # Grafana
-# Connect ELK-PRD1
-- VPN
-ssh jturyna@192.168.24.204
-
 # Grafana config
 /data/infra/grafana/develop/grafana.db
 # Návrh řešení
