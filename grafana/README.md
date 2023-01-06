@@ -1,8 +1,4 @@
 # Grafana
-# Connect ELK-PRD1
-- VPN
-@192.168.24.204
-
 # Todo
 
 - getDashboardUid -> předělat -> aktuálně nefunguje na duplikáty (může být víc dashboardů se stejným jménem napříč složkami, ale né v jedné složce)
